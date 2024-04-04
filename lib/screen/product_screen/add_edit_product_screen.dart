@@ -504,7 +504,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
               );
             });
           }
-          log("SelectImage List Length :: ${selectImageList.length - 1}");
+          log("SelectedImage List Length :: ${selectImageList.length - 1}");
           log("SelectImage List :: ${selectImageList.toList()}");
         }
     }

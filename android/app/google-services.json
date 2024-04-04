@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "187252915740",
+    "firebase_url": "https://cloud-database-equitysoft-default-rtdb.firebaseio.com",
+    "project_id": "cloud-database-equitysoft",
+    "storage_bucket": "cloud-database-equitysoft.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:187252915740:android:e46b887578d11d8897a9d9",
+        "android_client_info": {
+          "package_name": "com.example.equitysoft_add_update_delete_view_data_local_storage_database"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCCMj_R_DtHIxW7VYQ_epQQUb9DxrJBRQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

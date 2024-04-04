@@ -1,0 +1,34 @@
+class Strings{
+  static String home="Home";
+  static String productList="Product List";
+  static String addProduct="Add Product";
+  static String edit="Edit";
+  static String delete="Delete";
+  static String productName="Product Name";
+  static String manageCategory="Manage Category";
+  static String manageCompany="Manage Company";
+  static String category="Category";
+  static String companyName="Company Name";
+  static String company="Company";
+  static String description="Description";
+  static String price="Price";
+  static String qty="Qty";
+  static String save="Save";
+  static String minimum2Image="Minimum 2 Image";
+  static String enterProductName="Please Enter Product Name";
+  static String selectCategory="Please Select Category";
+  static String selectCompanyName="Please Select Company Name";
+  static String enterDescription="Please Enter Description";
+  static String enterPrice="Please Enter Price";
+  static String enterQty="Please Enter Qty";
+  static String editProduct="Edit Product";
+  static String productDetails="Product Details";
+  static String product="Product";
+  static String descriptionText="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s";
+  static String categoryName="Category Name";
+  static String enterCategoryName="Please Enter Category Name";
+  static String add="Add";
+  static String listOfCategories="List of Categories";
+  static String listOfCompanies="List of Companies";
+  static String enterCompanyName="Please Enter Company Name";
+}

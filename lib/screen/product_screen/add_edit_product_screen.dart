@@ -36,6 +36,7 @@ class AddEditProductScreen extends StatefulWidget {
   final String? price;
   final String? qty;
   final String? id;
+
   @override
   State<AddEditProductScreen> createState() => _AddEditProductScreenState();
 }
@@ -255,7 +256,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                         crossAxisSpacing: 10,
                                         mainAxisSpacing: 10),
                                 itemBuilder: (BuildContext context, int index) {
-                                  log("Selected Image Full Path :: ${selectImageList[index]}");
+                                  //     log("Selected Image Full Path :: ${selectImageList[index]}");
                                   return Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
@@ -279,7 +280,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                     crossAxisSpacing: 10,
                                     mainAxisSpacing: 10),
                             itemBuilder: (BuildContext context, int index) {
-                              log("Selected Image Full Path :: ${selectImageList[index]}");
+                              //   log("Selected Image Full Path :: ${selectImageList[index]}");
                               return Container(
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -290,8 +291,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                           : ColorName.blackColor,
                                     ),
                                   ),
-                                  child:
-                                  selectImageList[index]=="PlusIcon"
+                                  child: selectImageList[index] == "PlusIcon"
                                       ? GestureDetector(
                                           onTap: isReadOnly
                                               ? () => const SizedBox.shrink()
@@ -322,8 +322,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                                 padding:
                                                     const EdgeInsets.all(1),
                                                 child: Image.file(
-                                                  height: MediaQuery.of(context).size.height,
-                                                  width:MediaQuery.of(context).size.width,
+                                                  height: MediaQuery.of(context)
+                                                      .size
+                                                      .height,
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
                                                   File(selectImageList[index]),
                                                   fit: BoxFit.fill,
                                                 ),
@@ -360,106 +364,112 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                         text: widget.isEdit ? Strings.edit : Strings.save,
                         onTap: widget.isEdit
                             ? () async {
-                                if (formKey.currentState!.validate()) {
-                                  var product = {
-                                    "product_name": productNameController.text,
-                                    "category":
-                                        categoryController.dropDownValue!.value,
-                                    "company_name": companyNameController
-                                        .dropDownValue!.value,
-                                    "description": descriptionController.text,
-                                    "price": priceController.text,
-                                    "qty": qtyController.text,
-                                    "id": widget.id,
-                                    "image_url": selectImageUrlList
-                                  };
-                                  await uploadImageStorage().then((value) =>
-                                      Database.updateProduct(
-                                              product, widget.id!)
-                                          .then((value) => ScaffoldMessenger.of(
-                                                  context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      "Edit Product Success")))));
-                                  productNameController.clear();
-                                  descriptionController.clear();
-                                  setState(() {
-                                    categoryController.clearDropDown();
-                                    companyNameController.clearDropDown();
-                                  });
-                                  priceController.clear();
-                                  qtyController.clear();
-                                  selectImageList.clear();
-                                  if (context.mounted) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ProductListScreen()));
-                                  }
-                                } else {
-                                  setState(() {
-                                    autoValidateMode = true;
-                                  });
-                                }
+                          setState(() async {
+                            if (formKey.currentState!.validate()) {
+                              var product = {
+                                "product_name": productNameController.text,
+                                "category":
+                                categoryController.dropDownValue!.value,
+                                "company_name": companyNameController
+                                    .dropDownValue!.value,
+                                "description": descriptionController.text,
+                                "price": priceController.text,
+                                "qty": qtyController.text,
+                                "id": widget.id,
+                                "image_url": selectImageUrlList
+                              };
+                              await uploadImageStorage().then((value) =>
+                                  Database.updateProduct(
+                                      product, widget.id!)
+                                      .then((value) => ScaffoldMessenger.of(
+                                      context)
+                                      .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          "Edit Product Success")))));
+                              productNameController.clear();
+                              descriptionController.clear();
+                            //  setState(() {
+                                categoryController.clearDropDown();
+                                companyNameController.clearDropDown();
+                             // });
+                              priceController.clear();
+                              qtyController.clear();
+                              selectImageList.clear();
+                              if (context.mounted) {
+                                Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const ProductListScreen()));
+                              }
+                            } else {
+                             // setState(() {
+                                autoValidateMode = true;
+                             // });
+                            }
+                          });
+
                               }
                             : () async {
-                                if (formKey.currentState!.validate()) {
-                                  if (selectImageList.length > 2) {
-                                    isEnable = false;
-                                    isReadOnly = true;
-                                    enableInteractiveSelection = false;
-                                    var product = {
-                                      "product_name":
-                                          productNameController.text,
-                                      "category": categoryController
-                                          .dropDownValue!.value,
-                                      "company_name": companyNameController
-                                          .dropDownValue!.value,
-                                      "description": descriptionController.text,
-                                      "price": priceController.text,
-                                      "qty": qtyController.text,
-                                      "id": id,
-                                      "image_url": selectImageUrlList,
-                                    };
-                                    await uploadImageStorage().then((value) {
-                                      return Database.addProduct(product, id)
-                                          .then((value) => ScaffoldMessenger.of(
-                                                  context)
-                                              .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      "Add Product Success"))));
-                                    });
-                                    productNameController.clear();
-                                    descriptionController.clear();
-                                    setState(() {
+                                setState(() async {
+                                  if (formKey.currentState!.validate()) {
+                                    if (selectImageList.length > 2) {
+                                      isEnable = false;
+                                      isReadOnly = true;
+                                      enableInteractiveSelection = false;
+                                      var product = {
+                                        "product_name":
+                                            productNameController.text,
+                                        "category": categoryController
+                                            .dropDownValue!.value,
+                                        "company_name": companyNameController
+                                            .dropDownValue!.value,
+                                        "description":
+                                            descriptionController.text,
+                                        "price": priceController.text,
+                                        "qty": qtyController.text,
+                                        "id": id,
+                                        "image_url": selectImageUrlList,
+                                      };
+                                      await uploadImageStorage().then((value) {
+                                        return Database.addProduct(product, id)
+                                            .then((value) => ScaffoldMessenger
+                                                    .of(context)
+                                                .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        "Add Product Success"))));
+                                      });
+                                      productNameController.clear();
+                                      descriptionController.clear();
+                                      // setState(() {
                                       categoryController.clearDropDown();
                                       companyNameController.clearDropDown();
-                                    });
-                                    priceController.clear();
-                                    qtyController.clear();
-                                    selectImageList.clear();
-                                    if (context.mounted) {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const ProductListScreen()));
+                                      // });
+                                      priceController.clear();
+                                      qtyController.clear();
+                                      selectImageList.clear();
+                                      if (context.mounted) {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ProductListScreen()));
+                                      }
+                                    } else {
+                                      if (mounted) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    "Select Minimum 2 Image Required ::")));
+                                        log("Select Minimum 2 Image Required ::");
+                                      }
                                     }
                                   } else {
-                                    if (mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(const SnackBar(
-                                              content: Text(
-                                                  "Select Minimum 2 Image Required ::")));
-                                      log("Select Minimum 2 Image Required ::");
-                                    }
-                                  }
-                                } else {
-                                  setState(() {
+                                    // setState(() {
                                     autoValidateMode = true;
-                                  });
-                                }
+                                    // });
+                                  }
+                                });
                               }),
                   ],
                 ),
@@ -478,69 +488,63 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
         log(" :: Select Minimum 2 Image Required");
       }
     } else {
+      setState(() {
         for (var pickImage in pickerImages) {
           log("selectImageList :: ${selectImageList.toList()}");
           log("pickImage.path :: ${pickImage.path}");
           if (selectImageList.contains(pickImage.path)) {
-            setState(() {
-              if (mounted) {
-                ScaffoldMessenger.of(context)
-                    .showSnackBar(
-                    const SnackBar(content: Text("Already Image")));
-              }
-            });
-          }
-          else {
-            setState(() {
-              selectImageList.insert(
-                  selectImageList.length - 1,
-                  pickImage.path
-              );
-            });
+            if (mounted) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(const SnackBar(content: Text("Already Image")));
+            }
+          } else {
+            selectImageList.insert(selectImageList.length - 1, pickImage.path);
           }
           log("SelectedImage List Length :: ${selectImageList.length - 1}");
-          log("SelectImage List :: ${selectImageList.toList()}");
+          log("SelectedImage List :: ${selectImageList.toList()}");
         }
+      });
     }
   }
-  Future uploadImageStorage() async {
-    for (var imagePath in selectImageList) {
-      try {
-        if (File(imagePath).absolute.existsSync()) {
-          //var ref = FirebaseStorage.instance.ref().child("images").child(imagePath);
 
-          /*var ref = FirebaseStorage.instance.ref().child("images").child(DateTime.now().toString()).child(imagePath.toString().split("/").last);
+  Future uploadImageStorage() async {
+      for (var imagePath in selectImageList) {
+        try {
+          if (File(imagePath).absolute.existsSync()) {
+            //var ref = FirebaseStorage.instance.ref().child("images").child(imagePath);
+
+            /*var ref = FirebaseStorage.instance.ref().child("images").child(DateTime.now().toString()).child(imagePath.toString().split("/").last);
           await ref.putFile(File(imagePath));
           selectImageUrlList.add(await ref.getDownloadURL());*/
 
-          //var uploadTask = FirebaseStorage.instance.ref().child("images").child(imagePath).putFile(File(imagePath));
+            //var uploadTask = FirebaseStorage.instance.ref().child("images").child(imagePath).putFile(File(imagePath));
 
-          var uploadTask = FirebaseStorage.instance
-              .ref()
-              .child("images")
-              .child(id)
-              .child(imagePath.toString().split("/").last)
-              .putFile(File(imagePath.toString()));
-          var streamSubscription = uploadTask.snapshotEvents.listen((event) {
-            var per = event.bytesTransferred / event.totalBytes * 100;
-            log("Percentage :: ${per.toString()}");
-          });
-          var taskSnapshot = await uploadTask;
-          if (taskSnapshot.state == TaskState.success) {
-            selectImageUrlList.add(await taskSnapshot.ref.getDownloadURL());
+            var uploadTask = FirebaseStorage.instance
+                .ref()
+                .child("images")
+                .child(id)
+                .child(imagePath.toString().split("/").last)
+                .putFile(File(imagePath.toString()));
+            var streamSubscription = uploadTask.snapshotEvents.listen((event) {
+              var per = event.bytesTransferred / event.totalBytes * 100;
+              log("Percentage :: ${per.toString()}");
+            });
+            var taskSnapshot = await uploadTask;
+            if (taskSnapshot.state == TaskState.success) {
+              selectImageUrlList.add(await taskSnapshot.ref.getDownloadURL());
+            }
+            streamSubscription.cancel();
           }
-          streamSubscription.cancel();
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(e.toString())));
+            log(e.toString());
+          }
         }
-      } catch (e) {
-        if (mounted) {
-          ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(e.toString())));
-          log(e.toString());
-        }
+        setState(() {});
       }
       log("uploadImageStorage () selectImageList Length :: ${selectImageList.length - 1}");
       log("selectImageList.toList() :: ${selectImageList.toList()}");
-      setState(() {});
-    }
   }
 }

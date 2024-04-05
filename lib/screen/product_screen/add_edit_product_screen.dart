@@ -50,7 +50,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   final categoryController = SingleValueDropDownController();
   final companyNameController = SingleValueDropDownController();
   List<String> selectImageList = ["PlusIcon"];
-  //List<File> selectImageList = [File("PlusIcon")];
   List<String> selectImageUrlList = [];
   String id = FirebaseFirestore.instance.collection('Product').doc().id;
   bool isReadOnly = false;
@@ -266,7 +265,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                     ),
                                     child: Image.file(
                                       File(selectImageList[index]),
-                                      //selectImageList[index],
                                       fit: BoxFit.cover,
                                     ),
                                   );
@@ -293,7 +291,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                     ),
                                   ),
                                   child:
-                                 // selectImageList[index].toString()==File("PlusIcon").toString()
                                   selectImageList[index]=="PlusIcon"
                                       ? GestureDetector(
                                           onTap: isReadOnly
@@ -328,7 +325,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                                   height: MediaQuery.of(context).size.height,
                                                   width:MediaQuery.of(context).size.width,
                                                   File(selectImageList[index]),
-                                                 // selectImageList[index]
                                                   fit: BoxFit.fill,
                                                 ),
                                               ),
@@ -413,7 +409,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                     isEnable = false;
                                     isReadOnly = true;
                                     enableInteractiveSelection = false;
-                                    //String id=randomAlphaNumeric(10);
                                     var product = {
                                       "product_name":
                                           productNameController.text,
@@ -499,7 +494,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
             setState(() {
               selectImageList.insert(
                   selectImageList.length - 1,
-                  // File(pickImage.path),
                   pickImage.path
               );
             });
@@ -513,7 +507,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     for (var imagePath in selectImageList) {
       try {
         if (File(imagePath).absolute.existsSync()) {
-      //  if (imagePath.absolute.existsSync()) {
           //var ref = FirebaseStorage.instance.ref().child("images").child(imagePath);
 
           /*var ref = FirebaseStorage.instance.ref().child("images").child(DateTime.now().toString()).child(imagePath.toString().split("/").last);

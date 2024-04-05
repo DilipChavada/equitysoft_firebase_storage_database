@@ -50,8 +50,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   final qtyController = TextEditingController();
   final categoryController = SingleValueDropDownController();
   final companyNameController = SingleValueDropDownController();
-  List<String> selectImageList = ["PlusIcon"];
   List<String> selectImageUrlList = [];
+  List<String> selectImageList = ["PlusIcon"];
   String id = FirebaseFirestore.instance.collection('Product').doc().id;
   bool isReadOnly = false;
   bool isEnable = true;
@@ -364,7 +364,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                         text: widget.isEdit ? Strings.edit : Strings.save,
                         onTap: widget.isEdit
                             ? () async {
-                          setState(() async {
                             if (formKey.currentState!.validate()) {
                               var product = {
                                 "product_name": productNameController.text,
@@ -407,11 +406,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                 autoValidateMode = true;
                              // });
                             }
-                          });
-
                               }
                             : () async {
-                                setState(() async {
                                   if (formKey.currentState!.validate()) {
                                     if (selectImageList.length > 2) {
                                       isEnable = false;
@@ -465,11 +461,11 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                       }
                                     }
                                   } else {
-                                    // setState(() {
+                                    //setState(() {
                                     autoValidateMode = true;
-                                    // });
+                                    //});
                                   }
-                                });
+
                               }),
                   ],
                 ),
@@ -492,13 +488,13 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
         for (var pickImage in pickerImages) {
           log("selectImageList :: ${selectImageList.toList()}");
           log("pickImage.path :: ${pickImage.path}");
-          if (selectImageList.contains(pickImage.path)) {
+          if (!selectImageList.contains(pickImage.path)) {
+            selectImageList.insert(selectImageList.length - 1, pickImage.path);
+          } else {
             if (mounted) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(const SnackBar(content: Text("Already Image")));
             }
-          } else {
-            selectImageList.insert(selectImageList.length - 1, pickImage.path);
           }
           log("SelectedImage List Length :: ${selectImageList.length - 1}");
           log("SelectedImage List :: ${selectImageList.toList()}");

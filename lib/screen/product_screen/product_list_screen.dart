@@ -51,10 +51,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                        var docs = snapshot.data!.docs[index];
-                       var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
-                       var imageDataList=snapshot.data!.docs.map((e) => e.data()["image_url"]);
-                        log("All Data List :: $allDataList");
-                       log("Image Data List :: $imageDataList");
+                      // var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
+                      // var imageDataList=snapshot.data!.docs.map((e) => e.data()["image_url"]);
+                      //  log("All Data List :: $allDataList");
+                      // log("Image Data List :: $imageDataList");
                         return Padding(
                           padding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10),
@@ -201,7 +201,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             try{
                                             /* await Database.deleteProduct(
                                                 docs["id"]);*/
-                                              FirebaseStorage.instance
+                                              FirebaseStorage.instance.ref().child("gs://cloud-database-equitysoft.appspot.com").child("images").child(docs["id"]).delete().then((value) => log("delete image"));
+                                              /*FirebaseStorage.instance
                                                   .refFromURL(docs["id"])
                                                   .delete()
                                                   .then((value) =>
@@ -214,13 +215,14 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                      const ProductListScreen())));
+                                                      const ProductListScreen())));*/
 
                                             }catch(e){
+                                              if(context.mounted){
                                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
                                                 log(e.toString());
+                                              }
                                             }
-
                                           },
                                         ),
                                       ],

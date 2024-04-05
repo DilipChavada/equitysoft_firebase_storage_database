@@ -17,9 +17,11 @@ class Database {
         .doc(id)
         .update(updateProduct);
   }
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProduct() {
     return FirebaseFirestore.instance.collection("Product").orderBy("company_name",descending: true).snapshots();
   }
+
   static Future<void> deleteProduct(String id) async {
     FirebaseFirestore.instance
         .collection("Product")

@@ -201,7 +201,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             try{
                                             /* await Database.deleteProduct(
                                                 docs["id"]);*/
-                                              FirebaseStorage.instance.ref().child("gs://cloud-database-equitysoft.appspot.com").child("images").child(docs["id"]).delete().then((value) => log("delete image"));
+                                              FirebaseStorage.instance.ref("images/${docs["id"]}").delete().then((value) => log("delete image"));
                                               /*FirebaseStorage.instance
                                                   .refFromURL(docs["id"])
                                                   .delete()

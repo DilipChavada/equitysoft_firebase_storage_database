@@ -410,9 +410,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             : () async {
                                   if (formKey.currentState!.validate()) {
                                     if (selectImageList.length > 2) {
-                                      isEnable = false;
-                                      isReadOnly = true;
-                                      enableInteractiveSelection = false;
                                       var product = {
                                         "product_name":
                                             productNameController.text,
@@ -504,6 +501,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   }
 
   Future uploadImageStorage() async {
+    isEnable = false;
+    isReadOnly = true;
+    enableInteractiveSelection = false;
       for (var imagePath in selectImageList) {
         try {
           if (File(imagePath).absolute.existsSync()) {

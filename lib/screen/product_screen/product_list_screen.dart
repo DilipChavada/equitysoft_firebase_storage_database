@@ -13,6 +13,7 @@ import 'add_edit_product_screen.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});
+
   @override
   State<ProductListScreen> createState() => _ProductListScreenState();
 }
@@ -50,11 +51,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       shrinkWrap: true,
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
-                       var docs = snapshot.data!.docs[index];
-                      // var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
-                      // var imageDataList=snapshot.data!.docs.map((e) => e.data()["image_url"]);
-                      //  log("All Data List :: $allDataList");
-                      // log("Image Data List :: $imageDataList");
+                        var docs = snapshot.data!.docs[index];
+                        // var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
+                        List imageDataList = snapshot.data!.docs
+                            .map((e) => e.data()["image_url"])
+                            .toList();
+                        //  log("All Data List :: $allDataList");
+                        // log("Image Data List :: $imageDataList");
                         return Padding(
                           padding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10),
@@ -73,7 +76,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             qty: docs["qty"],
                                             description: docs["description"],
                                             imageUrl: docs["image_url"],
-
                                           )));
                             },
                             child: Container(
@@ -107,23 +109,27 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                           ),
-                                         child:GridView.builder(
-                                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                               crossAxisSpacing: 5,
-                                               mainAxisSpacing: 5,
-                                               crossAxisCount: 2),
-                                           itemCount: docs["image_url"].length,
-                                             itemBuilder: (context, imageIndex) {
-                                           return Container(
-                                                 decoration: BoxDecoration(
-                                                   borderRadius: BorderRadius.circular(5)
-                                                 ),
-                                                 clipBehavior: Clip.hardEdge,
-                                                 child: Image.network(
-                                                     docs["image_url"][imageIndex],fit: BoxFit.cover),
-                                               );
-                                             },
-                                        ),
+                                          child: GridView.builder(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisSpacing: 5,
+                                                    mainAxisSpacing: 5,
+                                                    crossAxisCount: 2),
+                                            itemCount: docs["image_url"].length,
+                                            itemBuilder: (context, imageIndex) {
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5)),
+                                                clipBehavior: Clip.hardEdge,
+                                                child: Image.network(
+                                                    docs["image_url"]
+                                                        [imageIndex],
+                                                    fit: BoxFit.cover),
+                                              );
+                                            },
+                                          ),
                                         ),
                                         const SizedBox(width: 10),
                                         Column(
@@ -178,7 +184,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                               qty: docs["qty"],
                                               category: docs["category"],
                                               companyName: docs["company_name"],
-                                             // imageUrl:docs["image_url"],
+                                              // imageUrl:docs["image_url"],
                                             );
                                           },
                                         ),
@@ -198,13 +204,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                           context,
                                           text: Strings.delete,
                                           onTap: () async {
-                                            try{
-                                            /* await Database.deleteProduct(
-                                                docs["id"]);*/
-                                              FirebaseStorage.instance.ref("images/${docs["id"]}").delete().then((value) => log("delete image"));
-                                              /*FirebaseStorage.instance
-                                                  .refFromURL(docs["id"])
-                                                  .delete()
+                                            try {
+                                              await Database.deleteProduct(
+                                                docs["id"])
                                                   .then((value) =>
                                                   ScaffoldMessenger.of(
                                                       context).showSnackBar(
@@ -215,11 +217,13 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                      const ProductListScreen())));*/
-
-                                            }catch(e){
-                                              if(context.mounted){
-                                                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString())));
+                                                      const ProductListScreen())));
+                                            } catch (e) {
+                                              if (context.mounted) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            e.toString())));
                                                 log(e.toString());
                                               }
                                             }

@@ -1,17 +1,19 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../screen/product_screen/add_edit_product_screen.dart';
 
 class Database {
-
-  static Future<void> addProduct(Map<String, dynamic> addProduct,String id) async {
+  static Future<void> addProduct(
+      Map<String, dynamic> addProduct, String id) async {
     return FirebaseFirestore.instance
         .collection("Product")
         .doc(id)
         .set(addProduct);
   }
-  static Future<void> updateProduct(Map<String, dynamic> updateProduct,String id) async {
+
+  static Future<void> updateProduct(
+      Map<String, dynamic> updateProduct, String id) async {
     FirebaseFirestore.instance
         .collection("Product")
         .doc(id)
@@ -19,16 +21,28 @@ class Database {
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProduct() {
-    return FirebaseFirestore.instance.collection("Product").orderBy("company_name",descending: true).snapshots();
+    return FirebaseFirestore.instance
+        .collection("Product")
+        .orderBy("company_name", descending: true)
+        .snapshots();
   }
 
   static Future<void> deleteProduct(String id) async {
-    FirebaseFirestore.instance
-        .collection("Product")
-        .doc(id)
-        .delete();
+    FirebaseFirestore.instance.collection("Product").doc(id).delete();
+
+    var folderRef = FirebaseStorage.instance.ref().child("images").child(id);
+
+    final ListResult result = await folderRef.listAll();
+
+    // Delete each image file in the folder
+    await Future.forEach(result.items, (Reference ref) async => await ref.delete());
+
+    // Delete the folder itself
+    await folderRef.delete();
   }
-  static getSingleProductDetails(BuildContext context,{
+
+  static getSingleProductDetails(
+    BuildContext context, {
     required String id,
     required String price,
     required String qty,
@@ -37,22 +51,25 @@ class Database {
     required String category,
     required String companyName,
     //required List imageUrl,
-  }){
-    return Navigator.pushReplacement(context, MaterialPageRoute(
-        builder: (context) => AddEditProductScreen(
-          isEdit: true,
-          description: description,
-          productName: productName,
-          id: id,
-          price: price,
-          qty: qty,
-          category: category,
-          companyName: companyName,
-           // imageList : imageUrl
-        )));
+  }) {
+    return Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => AddEditProductScreen(
+                  isEdit: true,
+                  description: description,
+                  productName: productName,
+                  id: id,
+                  price: price,
+                  qty: qty,
+                  category: category,
+                  companyName: companyName,
+                  // imageList : imageUrl
+                )));
   }
 
-  static Future<void> addCategory(Map<String, dynamic> addCategory,String id) async {
+  static Future<void> addCategory(
+      Map<String, dynamic> addCategory, String id) async {
     return FirebaseFirestore.instance
         .collection("Category")
         .doc(id)
@@ -60,17 +77,18 @@ class Database {
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategory() {
-    return FirebaseFirestore.instance.collection("Category").orderBy("category_name",descending: true).snapshots();
+    return FirebaseFirestore.instance
+        .collection("Category")
+        .orderBy("category_name", descending: true)
+        .snapshots();
   }
 
   static Future<void> deleteCategory(String id) async {
-    FirebaseFirestore.instance
-        .collection("Category")
-        .doc(id)
-        .delete();
+    FirebaseFirestore.instance.collection("Category").doc(id).delete();
   }
 
-  static Future<void> addCompany(Map<String, dynamic> addCompany,String id) async {
+  static Future<void> addCompany(
+      Map<String, dynamic> addCompany, String id) async {
     return FirebaseFirestore.instance
         .collection("Company")
         .doc(id)
@@ -78,13 +96,13 @@ class Database {
   }
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCompany() {
-    return FirebaseFirestore.instance.collection("Company").orderBy("company_name",descending: true).snapshots();
+    return FirebaseFirestore.instance
+        .collection("Company")
+        .orderBy("company_name", descending: true)
+        .snapshots();
   }
 
   static Future<void> deleteCompany(String id) async {
-    FirebaseFirestore.instance
-        .collection("Company")
-        .doc(id)
-        .delete();
+    FirebaseFirestore.instance.collection("Company").doc(id).delete();
   }
 }

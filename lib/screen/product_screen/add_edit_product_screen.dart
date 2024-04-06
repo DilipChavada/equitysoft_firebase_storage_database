@@ -6,13 +6,14 @@ import 'package:equitysoft_add_update_delete_view_data_local_storage_database/cu
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_textfield.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_list_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/services/database.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import '../../custom_appbar.dart';
 import '../../custom_container.dart';
 import '../../gen/colors.gen.dart';
 import '../../strings.dart';
+import 'package:path/path.dart' as path;
 
 class AddEditProductScreen extends StatefulWidget {
   const AddEditProductScreen({
@@ -51,7 +52,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   final categoryController = SingleValueDropDownController();
   final companyNameController = SingleValueDropDownController();
   List<String> selectImageUrlList = [];
-  List<String> selectImageList = ["PlusIcon"];
+  //List<String> selectImageList = ["PlusIcon"];
+  List<File> selectImageList = [File("PlusIcon")];
   String id = FirebaseFirestore.instance.collection('Product').doc().id;
   bool isReadOnly = false;
   bool isEnable = true;
@@ -265,7 +267,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                       ),
                                     ),
                                     child: Image.file(
-                                      File(selectImageList[index]),
+                                      //File(selectImageList[index]),
+                                      selectImageList[index],
                                       fit: BoxFit.cover,
                                     ),
                                   );
@@ -291,7 +294,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                           : ColorName.blackColor,
                                     ),
                                   ),
-                                  child: selectImageList[index] == "PlusIcon"
+                                  child: selectImageList[index].toString()==File("PlusIcon").toString()
+                                  //selectImageList[index] == "PlusIcon"
                                       ? GestureDetector(
                                           onTap: isReadOnly
                                               ? () => const SizedBox.shrink()
@@ -328,7 +332,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                                   width: MediaQuery.of(context)
                                                       .size
                                                       .width,
-                                                  File(selectImageList[index]),
+                                                  //File(selectImageList[index]),
+                                                  selectImageList[index],
                                                   fit: BoxFit.fill,
                                                 ),
                                               ),
@@ -472,7 +477,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     );
   }
 
-  selectMultipleImagePick() async {
+  /*selectMultipleImagePick() async {
     var pickerImages = await ImagePicker().pickMultiImage();
     if (selectImageList.length <= 1 && pickerImages.length < 2) {
       if (mounted) {
@@ -498,20 +503,66 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
         }
       });
     }
-  }
+  }*/
+  selectMultipleImagePick() async {
+    List<File> files = [];
+      final FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+        allowMultiple: true,
+      );
+    if (selectImageList.length <= 1 && result!.files.length < 2) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(" :: Select Minimum 2 Image Required")));
+        log(" :: Select Minimum 2 Image Required");
+      }
+    }else{
+     if (result != null) {
+        final List<String?> newPaths = result.paths;
+        final List<String> duplicatePaths = [];
 
+        // Check for duplicates
+        for (String? newPath in newPaths) {
+          String newFileName = path.basename(newPath!);
+          bool isDuplicate = files.any((file) => path.basename(file.path) == newFileName);
+          if (isDuplicate) {
+            duplicatePaths.add(newPath);
+          } else {
+            //files.add(File(newPath));
+            //selectImageList.add(File(newPath));
+            selectImageList.insert(selectImageList.length-1,File(newPath));
+            setState(() {});
+          }
+        }
+
+        // If duplicates found, display a message
+        if (duplicatePaths.isNotEmpty) {
+          log("Duplicates found for");
+          if(mounted){
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                  content:
+                  Text('Duplicates found for: ${duplicatePaths.join(', ')}')),
+            );
+          }
+        }
+      }
+    }
+    }
   Future uploadImageStorage() async {
     isEnable = false;
     isReadOnly = true;
     enableInteractiveSelection = false;
       for (var imagePath in selectImageList) {
         try {
-          if (File(imagePath).absolute.existsSync()) {
+         // if (File(imagePath).absolute.existsSync()) {
+          if (imagePath.absolute.existsSync()) {
             //var ref = FirebaseStorage.instance.ref().child("images").child(imagePath);
 
             /*var ref = FirebaseStorage.instance.ref().child("images").child(DateTime.now().toString()).child(imagePath.toString().split("/").last);
-          await ref.putFile(File(imagePath));
-          selectImageUrlList.add(await ref.getDownloadURL());*/
+             await ref.putFile(File(imagePath));
+             selectImageUrlList.add(await ref.getDownloadURL());*/
 
             //var uploadTask = FirebaseStorage.instance.ref().child("images").child(imagePath).putFile(File(imagePath));
 

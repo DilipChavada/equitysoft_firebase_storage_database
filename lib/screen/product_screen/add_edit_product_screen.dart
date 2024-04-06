@@ -52,9 +52,11 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   final categoryController = SingleValueDropDownController();
   final companyNameController = SingleValueDropDownController();
   List<String> selectImageUrlList = [];
-  //List<String> selectImageList = ["PlusIcon"];
   List<File> selectImageList = [File("PlusIcon")];
-  String id = FirebaseFirestore.instance.collection('Product').doc().id;
+  String id = FirebaseFirestore.instance
+      .collection('Product')
+      .doc()
+      .id;
   bool isReadOnly = false;
   bool isEnable = true;
   bool enableInteractiveSelection = true;
@@ -88,18 +90,18 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
           appBar: CustomAppBar.customAppBar(
             context,
             appBarTitle:
-                widget.isEdit ? Strings.editProduct : Strings.addProduct,
+            widget.isEdit ? Strings.editProduct : Strings.addProduct,
             onTapArrow: isReadOnly
                 ? () {
-                    const SizedBox.shrink();
-                  }
+              const SizedBox.shrink();
+            }
                 : () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const ProductListScreen()),
-                    );
-                  },
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ProductListScreen()),
+              );
+            },
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -140,14 +142,17 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                         }
                         return CustomDropDownTextField.customDropDownTextField(
                             isEnabled: isEnable,
-                            controller: categoryController, validator: (value) {
-                          if (value!.isEmpty) {
-                            return Strings.selectCategory;
-                          }
-                          return null;
-                        }, onChanged: (value) {
-                          log("select category :: $value");
-                        }, context,
+                            controller: categoryController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return Strings.selectCategory;
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {
+                              log("select category :: $value");
+                            },
+                            context,
                             hintText: Strings.category,
                             labelText: Strings.category,
                             dropDownList: allCategoryList.map((i) {
@@ -246,156 +251,203 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                     const SizedBox(height: 10),
                     widget.isEdit
                         ? GestureDetector(
-                            onTap: () {
-                              log("click");
-                            },
-                            child: GridView.builder(
-                                shrinkWrap: true,
-                                itemCount: selectImageList.length,
-                                gridDelegate:
-                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
-                                        crossAxisSpacing: 10,
-                                        mainAxisSpacing: 10),
-                                itemBuilder: (BuildContext context, int index) {
-                                  //     log("Selected Image Full Path :: ${selectImageList[index]}");
-                                  return Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      border: Border.all(
-                                        color: ColorName.greyBorderColor,
-                                      ),
-                                    ),
-                                    child: Image.file(
-                                      //File(selectImageList[index]),
-                                      selectImageList[index],
-                                      fit: BoxFit.cover,
-                                    ),
-                                  );
-                                }),
-                          )
+                      onTap: () {
+                        log("click");
+                      },
+                      child: GridView.builder(
+                          shrinkWrap: true,
+                          itemCount: selectImageList.length,
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10),
+                          itemBuilder: (BuildContext context, int index) {
+                            //     log("Selected Image Full Path :: ${selectImageList[index]}");
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: ColorName.greyBorderColor,
+                                ),
+                              ),
+                              child: Image.file(
+                                selectImageList[index],
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }),
+                    )
                         : GridView.builder(
-                            shrinkWrap: true,
-                            itemCount: selectImageList.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    crossAxisSpacing: 10,
-                                    mainAxisSpacing: 10),
-                            itemBuilder: (BuildContext context, int index) {
-                              //   log("Selected Image Full Path :: ${selectImageList[index]}");
-                              return Container(
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(5),
-                                    border: Border.all(
+                        shrinkWrap: true,
+                        itemCount: selectImageList.length,
+                        gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 4,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10),
+                        itemBuilder: (BuildContext context, int index) {
+                          //   log("Selected Image Full Path :: ${selectImageList[index]}");
+                          return Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: isReadOnly
+                                      ? ColorName.greyColor
+                                      : ColorName.blackColor,
+                                ),
+                              ),
+                              child: selectImageList[index].toString()==File("PlusIcon").toString()
+                                  ? GestureDetector(
+                                  onTap: isReadOnly
+                                      ? () => const SizedBox.shrink()
+                                      : () async {
+                                    selectMultipleImagePick();
+                                  },
+                                  child: Icon(Icons.add,
+                                      size: 40,
                                       color: isReadOnly
                                           ? ColorName.greyColor
-                                          : ColorName.blackColor,
+                                          : ColorName.blackColor))
+                                  : Stack(
+                                alignment: Alignment.topRight,
+                                children: [
+                                  GestureDetector(
+                                    onTap: isReadOnly
+                                        ? () =>
+                                    const SizedBox.shrink()
+                                        : () {
+                                      setState(() {
+                                        selectImageList
+                                            .removeAt(index);
+                                        log("Image Delete Success");
+                                        log("Remove After SelectImageList Length :: ${selectImageList
+                                                .length - 1}");
+                                        log("Remove After SelectImageList :: ${selectImageList.toList()}");
+                                      });
+                                    },
+                                    child: Padding(
+                                      padding:
+                                      const EdgeInsets.all(1),
+                                      child: Image.file(
+                                        height: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .height,
+                                        width: MediaQuery
+                                            .of(context)
+                                            .size
+                                            .width,
+                                        selectImageList[index],
+                                        fit: BoxFit.fill,
+                                      ),
                                     ),
                                   ),
-                                  child: selectImageList[index].toString()==File("PlusIcon").toString()
-                                  //selectImageList[index] == "PlusIcon"
-                                      ? GestureDetector(
-                                          onTap: isReadOnly
-                                              ? () => const SizedBox.shrink()
-                                              : () async {
-                                                  selectMultipleImagePick();
-                                                },
-                                          child: Icon(Icons.add,
-                                              size: 40,
-                                              color: isReadOnly
-                                                  ? ColorName.greyColor
-                                                  : ColorName.blackColor))
-                                      : Stack(
-                                          alignment: Alignment.topRight,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: isReadOnly
-                                                  ? () =>
-                                                      const SizedBox.shrink()
-                                                  : () {
-                                                      setState(() {
-                                                        selectImageList
-                                                            .removeAt(index);
-                                                        log("Image Delete Success");
-                                                        log("Delete Image selectImageList Length :: ${selectImageList.length - 1}");
-                                                      });
-                                                    },
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(1),
-                                                child: Image.file(
-                                                  height: MediaQuery.of(context)
-                                                      .size
-                                                      .height,
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  //File(selectImageList[index]),
-                                                  selectImageList[index],
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            ),
-                                            Transform.translate(
-                                                offset: const Offset(15, -15),
-                                                child: Icon(
-                                                  size: 30,
-                                                  Icons.delete,
-                                                  color: isReadOnly
-                                                      ? ColorName.greyColor
-                                                      : ColorName.blackColor,
-                                                )),
-                                          ],
-                                        ));
-                            }),
+                                  Transform.translate(
+                                      offset: const Offset(15, -15),
+                                      child: Icon(
+                                        size: 30,
+                                        Icons.delete,
+                                        color: isReadOnly
+                                            ? ColorName.greyColor
+                                            : ColorName.blackColor,
+                                      )),
+                                ],
+                              ));
+                        }),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         widget.isEdit
                             ? const Text("")
                             : selectImageList.length <= 2
-                                ? const Text(
-                                    "Select Minimum 2 Image Required",
-                                  )
-                                : const Text("")
+                            ? const Text(
+                          "Select Minimum 2 Image Required",
+                        )
+                            : const Text("")
                       ],
                     ),
                     const SizedBox(height: 10),
                     CustomContainer.customContainer(
-                        height: MediaQuery.of(context).size.height * 0.08,
+                        height: MediaQuery
+                            .of(context)
+                            .size
+                            .height * 0.08,
                         context,
                         text: widget.isEdit ? Strings.edit : Strings.save,
                         onTap: widget.isEdit
                             ? () async {
-                            if (formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
+                            var product = {
+                              "product_name": productNameController.text,
+                              "category":
+                              categoryController.dropDownValue!.value,
+                              "company_name": companyNameController
+                                  .dropDownValue!.value,
+                              "description": descriptionController.text,
+                              "price": priceController.text,
+                              "qty": qtyController.text,
+                              "id": widget.id,
+                              "image_url": selectImageUrlList
+                            };
+                            await uploadImageStorage().then((value) =>
+                                Database.updateProduct(
+                                    product, widget.id!)
+                                    .then((value) =>
+                                    ScaffoldMessenger.of(
+                                        context)
+                                        .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "Edit Product Success")))));
+                            productNameController.clear();
+                            descriptionController.clear();
+                            categoryController.clearDropDown();
+                            companyNameController.clearDropDown();
+                            priceController.clear();
+                            qtyController.clear();
+                            selectImageList.clear();
+                            if (context.mounted) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                      const ProductListScreen()));
+                            }
+                          } else {
+                            autoValidateMode = true;
+                          }
+                        }
+                            : () async {
+                          if (formKey.currentState!.validate()) {
+                            if (selectImageList.length > 2) {
                               var product = {
-                                "product_name": productNameController.text,
-                                "category":
-                                categoryController.dropDownValue!.value,
+                                "product_name":
+                                productNameController.text,
+                                "category": categoryController
+                                    .dropDownValue!.value,
                                 "company_name": companyNameController
                                     .dropDownValue!.value,
-                                "description": descriptionController.text,
+                                "description":
+                                descriptionController.text,
                                 "price": priceController.text,
                                 "qty": qtyController.text,
-                                "id": widget.id,
-                                "image_url": selectImageUrlList
+                                "id": id,
+                                "image_url": selectImageUrlList,
                               };
-                              await uploadImageStorage().then((value) =>
-                                  Database.updateProduct(
-                                      product, widget.id!)
-                                      .then((value) => ScaffoldMessenger.of(
-                                      context)
-                                      .showSnackBar(const SnackBar(
-                                      content: Text(
-                                          "Edit Product Success")))));
+                              await uploadImageStorage().then((value) {
+                                return Database.addProduct(product, id)
+                                    .then((value) =>
+                                    ScaffoldMessenger
+                                        .of(context)
+                                        .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            "Add Product Success"))));
+                              });
                               productNameController.clear();
                               descriptionController.clear();
-                            //  setState(() {
-                                categoryController.clearDropDown();
-                                companyNameController.clearDropDown();
-                             // });
+                              categoryController.clearDropDown();
+                              companyNameController.clearDropDown();
                               priceController.clear();
                               qtyController.clear();
                               selectImageList.clear();
@@ -407,68 +459,18 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                         const ProductListScreen()));
                               }
                             } else {
-                             // setState(() {
-                                autoValidateMode = true;
-                             // });
-                            }
+                              if (mounted) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        "Select Minimum 2 Image Required ::")));
+                                log("Select Minimum 2 Image Required ::");
                               }
-                            : () async {
-                                  if (formKey.currentState!.validate()) {
-                                    if (selectImageList.length > 2) {
-                                      var product = {
-                                        "product_name":
-                                            productNameController.text,
-                                        "category": categoryController
-                                            .dropDownValue!.value,
-                                        "company_name": companyNameController
-                                            .dropDownValue!.value,
-                                        "description":
-                                            descriptionController.text,
-                                        "price": priceController.text,
-                                        "qty": qtyController.text,
-                                        "id": id,
-                                        "image_url": selectImageUrlList,
-                                      };
-                                      await uploadImageStorage().then((value) {
-                                        return Database.addProduct(product, id)
-                                            .then((value) => ScaffoldMessenger
-                                                    .of(context)
-                                                .showSnackBar(const SnackBar(
-                                                    content: Text(
-                                                        "Add Product Success"))));
-                                      });
-                                      productNameController.clear();
-                                      descriptionController.clear();
-                                      // setState(() {
-                                      categoryController.clearDropDown();
-                                      companyNameController.clearDropDown();
-                                      // });
-                                      priceController.clear();
-                                      qtyController.clear();
-                                      selectImageList.clear();
-                                      if (context.mounted) {
-                                        Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const ProductListScreen()));
-                                      }
-                                    } else {
-                                      if (mounted) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    "Select Minimum 2 Image Required ::")));
-                                        log("Select Minimum 2 Image Required ::");
-                                      }
-                                    }
-                                  } else {
-                                    //setState(() {
-                                    autoValidateMode = true;
-                                    //});
-                                  }
-
-                              }),
+                            }
+                          } else {
+                            autoValidateMode = true;
+                          }
+                        }),
                   ],
                 ),
               ),
@@ -477,87 +479,50 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     );
   }
 
-  /*selectMultipleImagePick() async {
-    var pickerImages = await ImagePicker().pickMultiImage();
-    if (selectImageList.length <= 1 && pickerImages.length < 2) {
+  selectMultipleImagePick() async {
+    final FilePickerResult? imagePickers = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
+      allowMultiple: true,
+    );
+    if (selectImageList.length <= 1 && imagePickers!.files.length < 2) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             content: Text(" :: Select Minimum 2 Image Required")));
         log(" :: Select Minimum 2 Image Required");
       }
     } else {
-      setState(() {
-        for (var pickImage in pickerImages) {
-          log("selectImageList :: ${selectImageList.toList()}");
-          log("pickImage.path :: ${pickImage.path}");
-          if (!selectImageList.contains(pickImage.path)) {
-            selectImageList.insert(selectImageList.length - 1, pickImage.path);
+       List<String> duplicateAllImageList = [];
+        for (var imagePick in imagePickers!.paths) {
+          log("imagePick.paths :: $imagePick");
+          if (selectImageList.any((file) => path.basename(file.path) == path.basename(imagePick!))) {
+          duplicateAllImageList.add(imagePick!);
           } else {
-            if (mounted) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(const SnackBar(content: Text("Already Image")));
-            }
-          }
-          log("SelectedImage List Length :: ${selectImageList.length - 1}");
-          log("SelectedImage List :: ${selectImageList.toList()}");
-        }
-      });
-    }
-  }*/
-  selectMultipleImagePick() async {
-    List<File> files = [];
-      final FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
-        allowMultiple: true,
-      );
-    if (selectImageList.length <= 1 && result!.files.length < 2) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(" :: Select Minimum 2 Image Required")));
-        log(" :: Select Minimum 2 Image Required");
-      }
-    }else{
-     if (result != null) {
-        final List<String?> newPaths = result.paths;
-        final List<String> duplicatePaths = [];
-
-        // Check for duplicates
-        for (String? newPath in newPaths) {
-          String newFileName = path.basename(newPath!);
-          bool isDuplicate = files.any((file) => path.basename(file.path) == newFileName);
-          if (isDuplicate) {
-            duplicatePaths.add(newPath);
-          } else {
-            //files.add(File(newPath));
-            //selectImageList.add(File(newPath));
-            selectImageList.insert(selectImageList.length-1,File(newPath));
+            selectImageList.insert(selectImageList.length - 1, File(imagePick!));
             setState(() {});
           }
         }
+       log("SelectedImage List Length :: ${selectImageList.length - 1}");
+       log("SelectedImage List :: ${selectImageList.toList()}");
 
-        // If duplicates found, display a message
-        if (duplicatePaths.isNotEmpty) {
-          log("Duplicates found for");
-          if(mounted){
+        if (duplicateAllImageList.isNotEmpty) {
+          if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   content:
-                  Text('Duplicates found for: ${duplicatePaths.join(', ')}')),
-            );
+                  Text("Duplicates Image Found :: ${duplicateAllImageList.join(', ')}")));
+                  log("Duplicates Image Found :: ${duplicateAllImageList.join(', ')}");
           }
         }
       }
-    }
-    }
+  }
   Future uploadImageStorage() async {
     isEnable = false;
     isReadOnly = true;
     enableInteractiveSelection = false;
-      for (var imagePath in selectImageList) {
+     for (var imagePath in selectImageList) {
         try {
-         // if (File(imagePath).absolute.existsSync()) {
-          if (imagePath.absolute.existsSync()) {
+        if (File(imagePath.path).absolute.existsSync()) {
             //var ref = FirebaseStorage.instance.ref().child("images").child(imagePath);
 
             /*var ref = FirebaseStorage.instance.ref().child("images").child(DateTime.now().toString()).child(imagePath.toString().split("/").last);
@@ -565,13 +530,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
              selectImageUrlList.add(await ref.getDownloadURL());*/
 
             //var uploadTask = FirebaseStorage.instance.ref().child("images").child(imagePath).putFile(File(imagePath));
-
             var uploadTask = FirebaseStorage.instance
                 .ref()
                 .child("images")
                 .child(id)
-                .child(imagePath.toString().split("/").last)
-                .putFile(File(imagePath.toString()));
+                .child(imagePath.path.toString().split("/").last)
+                .putFile(File(imagePath.path));
             var streamSubscription = uploadTask.snapshotEvents.listen((event) {
               var per = event.bytesTransferred / event.totalBytes * 100;
               log("Percentage :: ${per.toString()}");
@@ -581,17 +545,17 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
               selectImageUrlList.add(await taskSnapshot.ref.getDownloadURL());
             }
             streamSubscription.cancel();
-          }
+        }
         } catch (e) {
           if (mounted) {
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(e.toString())));
-            log(e.toString());
+            log("error :: ${e.toString()}");
           }
         }
         setState(() {});
       }
       log("uploadImageStorage () selectImageList Length :: ${selectImageList.length - 1}");
       log("selectImageList.toList() :: ${selectImageList.toList()}");
-  }
+ }
 }

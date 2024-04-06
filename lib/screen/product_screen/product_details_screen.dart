@@ -1,8 +1,10 @@
+import 'dart:developer';
+
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_container.dart';
+import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/home_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/add_edit_product_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_list_screen.dart';
 import 'package:flutter/material.dart';
-
 import '../../custom_appbar.dart';
 import '../../custom_textstyles.dart';
 import '../../gen/colors.gen.dart';
@@ -11,23 +13,23 @@ import '../../strings.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key,
-  this.productName,
-  this.price,
-    this.category,
-    this.companyName,
-    this.qty,
-    this.description,
-    this.id,
-    this.imageUrl,
+  required this.productName,
+  required this.price,
+    required this.category,
+    required this.companyName,
+    required this.qty,
+    required this.description,
+    required this.id,
+    required this.imageUrl,
   });
-  final String? productName;
-  final String? price;
-  final String? category;
-  final String? companyName;
-  final String? qty;
-  final String? description;
-  final String? id;
-  final List? imageUrl;
+  final String productName;
+  final String price;
+  final String category;
+  final String companyName;
+  final String qty;
+  final String description;
+  final String id;
+  final List imageUrl;
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
 }
@@ -67,7 +69,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   padding: const EdgeInsets.all(10),
                   child: GridView.builder(
                     shrinkWrap: true,
-                    itemCount: widget.imageUrl!.length,
+                    itemCount: widget.imageUrl.length,
                     itemBuilder: (context, index) {
                       return Container(
                         decoration: BoxDecoration(
@@ -75,7 +77,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
                         clipBehavior: Clip.hardEdge,
                         child: Image.network(
-                            widget.imageUrl![index],fit: BoxFit.cover),
+                            widget.imageUrl[index],fit: BoxFit.cover),
                       );
                     },
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -89,27 +91,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("${widget.productName}",style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
+                  Text(widget.productName,style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
                  Row(
                    children: [
                      Text("${Strings.price} :",style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
-                     Text("${widget.price}",style:CustomTextStyles.textStyle14(context)),
+                     Text(widget.price,style:CustomTextStyles.textStyle14(context)),
                    ],
                  )
                 ],
               ),
-              Text("${widget.category}",style:CustomTextStyles.textStyle9(context)),
+              Text(widget.category,style:CustomTextStyles.textStyle9(context)),
               const SizedBox(height:3),
               Padding(
                 padding: const EdgeInsets.only(right:20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${widget.companyName}",style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
+                    Text(widget.companyName,style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
                     Row(
                       children: [
                         Text("${Strings.qty}:",style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
-                        Text("${widget.qty}",style:CustomTextStyles.textStyle14(context)),
+                        Text(widget.qty,style:CustomTextStyles.textStyle14(context)),
                       ],
                     )
 
@@ -118,7 +120,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
               const SizedBox(height:20),
               Text("${Strings.description}:",style:CustomTextStyles.textStyle14(context).copyWith(fontWeight: FontWeight.w500)),
-              Text("${widget.description}",style: CustomTextStyles.textStyle14(context)),
+              Text(widget.description,style: CustomTextStyles.textStyle14(context)),
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -143,11 +145,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     height:MediaQuery.of(context).size.height*0.05,
                     width:MediaQuery.of(context).size.width*0.20,
                     textStyle: CustomTextStyles.textStyle14(context).copyWith(color:ColorName.whiteColor),
-                    context, text: Strings.delete, onTap: () async {
-                    await Database.deleteProduct(widget.id!).then((value) {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const ProductListScreen()));
-                    });
-                  },),
+                    context, text: Strings.delete,
+                    onTap: () async {
+                      try {
+                        log("widget.id::${widget.id}");
+                        await Database.deleteProduct(
+                           widget.id)
+                            .then((value) =>
+                            ScaffoldMessenger.of(
+                                context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        "Record Deleted success")
+                                ))).then((value) => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const ProductListScreen())));
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(
+                              content: Text(
+                                  e.toString())));
+                          log(e.toString());
+                        }
+                      }
+                    },
+                  ),
                 ],
               )
             ],

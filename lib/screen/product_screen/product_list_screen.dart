@@ -3,7 +3,6 @@ import 'package:equitysoft_add_update_delete_view_data_local_storage_database/cu
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_textstyles.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/home_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_details_screen.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import '../../custom_appbar.dart';
 import '../../gen/colors.gen.dart';
@@ -52,12 +51,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var docs = snapshot.data!.docs[index];
-                        // var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
-                        List imageDataList = snapshot.data!.docs
-                            .map((e) => e.data()["image_url"])
-                            .toList();
-                        //  log("All Data List :: $allDataList");
-                        // log("Image Data List :: $imageDataList");
+                        //var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
+                       // log("All Data List :: $allDataList");
+                       // List imageDataList = snapshot.data!.docs.map((e) => e.data()["image_url"]).toList();
+                        //log("Image Data List :: $imageDataList");
                         return Padding(
                           padding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10),
@@ -212,7 +209,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                                       context).showSnackBar(
                                                       const SnackBar(
                                                           content: Text(
-                                                              "Image Deleted success")
+                                                              "Record Deleted success")
                                                       ))).then((value) => Navigator.pushReplacement(
                                                   context,
                                                   MaterialPageRoute(

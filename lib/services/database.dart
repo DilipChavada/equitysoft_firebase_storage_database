@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../screen/product_screen/add_edit_product_screen.dart';
 
 class Database {
+
   static Future<void> addProduct(
       Map<String, dynamic> addProduct, String id) async {
     return FirebaseFirestore.instance
@@ -28,6 +29,7 @@ class Database {
   }
 
   static Future<void> deleteProduct(String id) async {
+
     FirebaseFirestore.instance.collection("Product").doc(id).delete();
 
     var folderRef = FirebaseStorage.instance.ref().child("images").child(id);

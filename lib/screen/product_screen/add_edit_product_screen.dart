@@ -9,6 +9,7 @@ import 'package:equitysoft_add_update_delete_view_data_local_storage_database/se
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../custom_appbar.dart';
 import '../../custom_container.dart';
 import '../../gen/colors.gen.dart';
@@ -234,6 +235,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                     ),
                     const SizedBox(height: 10),
                     CustomTextField.customTextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly
+                      ],
                       enableInteractiveSelection: enableInteractiveSelection,
                       readOnly: isReadOnly,
                       validator: (value) {
@@ -419,8 +423,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                           }
                         }
                             : () async {
-                          if (formKey.currentState!.validate()) {
-                            if (selectImageList.length > 2) {
+                          if (formKey.currentState!.validate() && selectImageList.length > 2){
                               var product = {
                                 "product_name":
                                 productNameController.text,
@@ -432,11 +435,13 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                 descriptionController.text,
                                 "price": priceController.text,
                                 "qty": qtyController.text,
-                                "id": id,
+                                "id": "${productNameController.text}-$id",
+                               // "id": id,
                                 "image_url": selectImageUrlList,
                               };
                               await uploadImageStorage().then((value) {
-                                return Database.addProduct(product, id)
+                              //  return Database.addProduct(product, id)
+                                return Database.addProduct(product, "${productNameController.text}-$id")
                                     .then((value) =>
                                     ScaffoldMessenger
                                         .of(context)
@@ -458,17 +463,15 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                         builder: (context) =>
                                         const ProductListScreen()));
                               }
-                            } else {
-                              if (mounted) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                    content: Text(
-                                        "Select Minimum 2 Image Required ::")));
-                                log("Select Minimum 2 Image Required ::");
-                              }
                             }
-                          } else {
+                          else {
                             autoValidateMode = true;
+                            if(selectImageList.length<=2){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  content: Text(
+                                      "Select Minimum 2 Image Required ::")));
+                            }
                           }
                         }),
                   ],
@@ -533,7 +536,8 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
             var uploadTask = FirebaseStorage.instance
                 .ref()
                 .child("images")
-                .child(id)
+                //.child(id)
+                .child("${productNameController.text}-$id")
                 .child(imagePath.path.toString().split("/").last)
                 .putFile(File(imagePath.path));
             var streamSubscription = uploadTask.snapshotEvents.listen((event) {

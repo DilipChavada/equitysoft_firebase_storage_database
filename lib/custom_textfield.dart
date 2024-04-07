@@ -1,5 +1,6 @@
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_textstyles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'gen/colors.gen.dart';
 
@@ -14,8 +15,10 @@ class CustomTextField{
         String? Function(String?)? validator,
         bool readOnly = false,
         bool enableInteractiveSelection=true,
+        List<TextInputFormatter>? inputFormatters,
    }){
     return TextFormField(
+      inputFormatters: inputFormatters,
       style: CustomTextStyles.textStyle16(context).copyWith(color:readOnly ? ColorName.greyColor : ColorName.blackColor),
       enableInteractiveSelection: enableInteractiveSelection,
       readOnly: readOnly,

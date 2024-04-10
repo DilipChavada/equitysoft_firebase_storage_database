@@ -17,7 +17,7 @@ import '../../strings.dart';
 import 'package:path/path.dart' as path;
 
 class AddEditProductScreen extends StatefulWidget {
-  const AddEditProductScreen({
+  AddEditProductScreen({
     super.key,
     this.isEdit = false,
     this.productName,
@@ -27,9 +27,8 @@ class AddEditProductScreen extends StatefulWidget {
     this.price,
     this.qty,
     this.id,
-    //this.imageList
+    this.imageList,
   });
-
   final bool isEdit;
   final String? productName;
   final String? category;
@@ -38,6 +37,7 @@ class AddEditProductScreen extends StatefulWidget {
   final String? price;
   final String? qty;
   final String? id;
+  final List? imageList;
 
   @override
   State<AddEditProductScreen> createState() => _AddEditProductScreenState();
@@ -65,17 +65,13 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   initialEditData() {
     productNameController.text = widget.productName!;
     companyNameController.setDropDown(DropDownValueModel(
-        name: widget.companyName!, value: widget.companyName!));
+        name: widget.companyName!, value: widget.companyName));
     categoryController.setDropDown(
-        DropDownValueModel(name: widget.category!, value: widget.category!));
+        DropDownValueModel(name: widget.category!, value: widget.category));
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    //imageUrl=widget.imageList!;
-    //imageFileList=widget.imageList!;
-    //log("widget.imageList.toString() :: ${widget.imageList.toString()}");
-    //log("imageURL:: $imageUrl");
-    //log("ImageFileList:: $imageFileList");
+   // selectImageList=widget.imageList!;
   }
 
   @override
@@ -253,7 +249,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                       labelText: Strings.qty,
                     ),
                     const SizedBox(height: 10),
-                    widget.isEdit
+                    /*widget.isEdit
                         ? GestureDetector(
                       onTap: () {
                         log("click");
@@ -282,7 +278,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             );
                           }),
                     )
-                        : GridView.builder(
+                        : */GridView.builder(
                         shrinkWrap: true,
                         itemCount: selectImageList.length,
                         gridDelegate:
@@ -382,7 +378,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                         text: widget.isEdit ? Strings.edit : Strings.save,
                         onTap: widget.isEdit
                             ? () async {
-                          if (formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate() && selectImageList.length > 2) {
                             var product = {
                               "product_name": productNameController.text,
                               "category":
@@ -420,6 +416,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             }
                           } else {
                             autoValidateMode = true;
+                            if(selectImageList.length<=2){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  content: Text(
+                                      "Select Minimum 2 Image Required ::")));
+                            }
                           }
                         }
                             : () async {

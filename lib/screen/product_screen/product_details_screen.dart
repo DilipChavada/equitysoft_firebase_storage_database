@@ -1,5 +1,5 @@
 import 'dart:developer';
-
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_container.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/home_screen.dart';
@@ -165,6 +165,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       qty: widget.qty,
                                       category: widget.category,
                                       companyName: widget.companyName,
+                                      //imageList: const [],
+                                      imageList: widget.imageUrl,
                                     )));
                       },
                     ),

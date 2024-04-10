@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +46,7 @@ class Database {
   }
 
   static getSingleProductDetails(
-    BuildContext context, {
+    BuildContext context,{
     required String id,
     required String price,
     required String qty,
@@ -52,8 +54,8 @@ class Database {
     required String productName,
     required String category,
     required String companyName,
-    //required List imageUrl,
-  }) {
+        required List imageList,
+  }){
     return Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -66,8 +68,10 @@ class Database {
                   qty: qty,
                   category: category,
                   companyName: companyName,
-                  // imageList : imageUrl
-                )));
+                  imageList : imageList
+                )
+        )
+    );
   }
 
   static Future<void> addCategory(

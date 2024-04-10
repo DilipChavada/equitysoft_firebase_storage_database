@@ -40,7 +40,7 @@ class Database {
     await Future.forEach(result.items, (Reference ref) async => await ref.delete());
 
     // Delete the folder itself
-    await folderRef.delete();
+    //await folderRef.delete();
   }
 
   static getSingleProductDetails(

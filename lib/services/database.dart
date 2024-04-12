@@ -54,7 +54,7 @@ class Database {
     required String productName,
     required String category,
     required String companyName,
-        required List imageList,
+    required List imageList,
   }){
     return Navigator.pushReplacement(
         context,

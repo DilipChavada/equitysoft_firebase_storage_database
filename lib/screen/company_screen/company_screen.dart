@@ -66,11 +66,9 @@ class _CompanyScreenState extends State<CompanyScreen> {
                         String id=FirebaseFirestore.instance.collection('Company').doc().id;
                         var company = {
                           "company_name": companyNameController.text,
-                          "id" : "${companyNameController.text}-$id",
-                        //  "id" : id;
+                         "id" : id,
                         };
-                        //await Database.addCompany(company,id).then((value) {
-                        await Database.addCompany(company,"${companyNameController.text}-$id").then((value) {
+                        await Database.addCompany(company,id).then((value) {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
                                   content: Text("Add Company Success")));

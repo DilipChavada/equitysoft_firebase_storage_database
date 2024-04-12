@@ -17,7 +17,7 @@ import '../../strings.dart';
 import 'package:path/path.dart' as path;
 
 class AddEditProductScreen extends StatefulWidget {
-  AddEditProductScreen({
+  const AddEditProductScreen({
     super.key,
     this.isEdit = false,
     this.productName,
@@ -437,14 +437,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                 descriptionController.text,
                                 "price": priceController.text,
                                 "qty": qtyController.text,
-                                "id": "${productNameController.text}-$id",
-                               // "id": id,
+                                "id": id,
                                 "image_url": selectImageUrlList,
                               };
                               await uploadImageStorage().then((value) {
-                              //  return Database.addProduct(product, id)
-                                return Database.addProduct(product, "${productNameController.text}-$id")
-                                    .then((value) =>
+                              return Database.addProduct(product, id)
+                                  .then((value) =>
                                     ScaffoldMessenger
                                         .of(context)
                                         .showSnackBar(const SnackBar(
@@ -538,8 +536,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
             var uploadTask = FirebaseStorage.instance
                 .ref()
                 .child("images")
-                //.child(id)
-                .child("${productNameController.text}-$id")
+                .child(id)
                 .child(imagePath.path.toString().split("/").last)
                 .putFile(File(imagePath.path));
             var streamSubscription = uploadTask.snapshotEvents.listen((event) {

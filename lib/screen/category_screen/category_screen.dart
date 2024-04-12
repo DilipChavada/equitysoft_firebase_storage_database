@@ -68,11 +68,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           String id=FirebaseFirestore.instance.collection('Category').doc().id;
                           var category = {
                               "category_name": categoryNameController.text,
-                             // "id" : id,
-                            "id" : "${categoryNameController.text}-$id",
+                              "id" : id,
                             };
-                            //await Database.addCategory(category,id).then((value) {
-                          await Database.addCategory(category,"${categoryNameController.text}-$id").then((value) {
+                            await Database.addCategory(category,id).then((value) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text("Add Category Success")));

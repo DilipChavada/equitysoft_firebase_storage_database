@@ -33,15 +33,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                  builder: (context) => AddEditProductScreen(
-                    category: "",
-                    companyName: "",
-                    description: "",
-                    id: "",
-                    price: "",
-                    productName: "",
-                    qty: "",
-                  )),
+                  builder: (context) => const AddEditProductScreen()),
             );
           }),
           body: StreamBuilder(
@@ -80,7 +72,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                             companyName: docs["company_name"],
                                             qty: docs["qty"],
                                             description: docs["description"],
-                                            imageUrl: docs["image_url"],
+                                            imageList: docs["image_url"],
                                           )));
                             },
                             child: Container(

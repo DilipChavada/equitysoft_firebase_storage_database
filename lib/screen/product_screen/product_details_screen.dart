@@ -22,7 +22,7 @@ class ProductDetailsScreen extends StatefulWidget {
     required this.qty,
     required this.description,
     required this.id,
-    required this.imageUrl,
+    required this.imageList,
   });
 
   final String productName;
@@ -32,7 +32,7 @@ class ProductDetailsScreen extends StatefulWidget {
   final String qty;
   final String description;
   final String id;
-  final List imageUrl;
+  final List imageList;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -76,13 +76,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     padding: const EdgeInsets.all(10),
                     child: GridView.builder(
                       shrinkWrap: true,
-                      itemCount: widget.imageUrl.length,
+                      itemCount: widget.imageList.length,
                       itemBuilder: (context, index) {
                         return Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5)),
                           clipBehavior: Clip.hardEdge,
-                          child: Image.network(widget.imageUrl[index],
+                          child: Image.network(widget.imageList[index],
                               fit: BoxFit.cover),
                         );
                       },
@@ -165,8 +165,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                       qty: widget.qty,
                                       category: widget.category,
                                       companyName: widget.companyName,
-                                      //imageList: const [],
-                                      imageList: widget.imageUrl,
+                                      imageList: widget.imageList,
                                     )));
                       },
                     ),

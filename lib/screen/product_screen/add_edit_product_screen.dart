@@ -71,7 +71,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-   // selectImageList=widget.imageList!;
+    //selectImageList=widget.imageList!;
   }
 
   @override
@@ -249,36 +249,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                       labelText: Strings.qty,
                     ),
                     const SizedBox(height: 10),
-                    /*widget.isEdit
-                        ? GestureDetector(
-                      onTap: () {
-                        log("click");
-                      },
-                      child: GridView.builder(
-                          shrinkWrap: true,
-                          itemCount: selectImageList.length,
-                          gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 4,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10),
-                          itemBuilder: (BuildContext context, int index) {
-                            //     log("Selected Image Full Path :: ${selectImageList[index]}");
-                            return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: ColorName.greyBorderColor,
-                                ),
-                              ),
-                              child: Image.file(
-                                selectImageList[index],
-                                fit: BoxFit.cover,
-                              ),
-                            );
-                          }),
-                    )
-                        : */GridView.builder(
+                    GridView.builder(
                         shrinkWrap: true,
                         itemCount: selectImageList.length,
                         gridDelegate:

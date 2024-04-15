@@ -71,7 +71,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    //selectImageList=widget.imageList!;
+    selectImageList=widget.imageList!.cast<File>();
   }
 
   @override

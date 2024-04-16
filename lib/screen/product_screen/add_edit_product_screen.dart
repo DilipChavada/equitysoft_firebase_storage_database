@@ -72,6 +72,16 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
     //selectImageList=widget.imageList!;
+    log("widget.imageList! :: ${widget.imageList!.toList()}");
+    for (var item in widget.imageList!) {
+      if (item is File) {
+        selectImageList.insert(selectImageList.length-1,item);
+      } else if (item is String) {
+        selectImageList.insert(selectImageList.length-1,File(item));
+      } else {
+        throw ArgumentError('Unsupported item type in the list');
+      }
+    }
   }
 
   @override
@@ -514,7 +524,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   }
 
   selectMultipleImagePick() async {
-    final FilePickerResult? imagePickers = await FilePicker.platform.pickFiles(
+    var imagePickers = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png', 'gif'],
       allowMultiple: true,

@@ -51,10 +51,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var docs = snapshot.data!.docs[index];
-                        //var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
-                       // log("All Data List :: $allDataList");
-                       // List imageDataList = snapshot.data!.docs.map((e) => e.data()["image_url"]).toList();
-                        //log("Image Data List :: $imageDataList");
+                        var allDataList=snapshot.data!.docs.map((e) => e.data()).toList();
+                        log("All Data List :: $allDataList");
+                        List imageDataList = snapshot.data!.docs.map((e) => e.data()["image_url"]).toList();
+                        log("Image Data List :: $imageDataList");
                         return Padding(
                           padding: const EdgeInsets.only(
                               top: 10, left: 10, right: 10),

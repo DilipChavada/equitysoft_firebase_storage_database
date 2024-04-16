@@ -71,7 +71,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    selectImageList=widget.imageList!.cast<File>();
+    //selectImageList=widget.imageList!;
   }
 
   @override
@@ -347,7 +347,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             .height * 0.08,
                         context,
                         text: widget.isEdit ? Strings.edit : Strings.save,
-                        onTap: widget.isEdit
+                        /*onTap: widget.isEdit
                             ? () async {
                           if (formKey.currentState!.validate() && selectImageList.length > 2) {
                             var product = {
@@ -444,7 +444,67 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                                       "Select Minimum 2 Image Required ::")));
                             }
                           }
-                        }),
+                        }),*/
+                      onTap: () async {
+                        if (formKey.currentState!.validate() && selectImageList.length > 2){
+                          var product = {
+                            "product_name":
+                            productNameController.text,
+                            "category": categoryController
+                                .dropDownValue!.value,
+                            "company_name": companyNameController
+                                .dropDownValue!.value,
+                            "description":
+                            descriptionController.text,
+                            "price": priceController.text,
+                            "qty": qtyController.text,
+                            "id": widget.isEdit ? widget.id : id,
+                            "image_url": selectImageUrlList,
+                          };
+                          widget.isEdit ? await uploadImageStorage(widget.id!).then((value) =>
+                              Database.updateProduct(
+                                  product, widget.id!)
+                                  .then((value) =>
+                                  ScaffoldMessenger.of(
+                                      context)
+                                      .showSnackBar(const SnackBar(
+                                      content: Text(
+                                          "Edit Product Success"))))) :
+                          await uploadImageStorage(id).then((value) {
+                            return Database.addProduct(product, id)
+                                .then((value) =>
+                                ScaffoldMessenger
+                                    .of(context)
+                                    .showSnackBar(const SnackBar(
+                                    content: Text(
+                                        "Add Product Success"))));
+                          })
+                          ;
+                          productNameController.clear();
+                          descriptionController.clear();
+                          categoryController.clearDropDown();
+                          companyNameController.clearDropDown();
+                          priceController.clear();
+                          qtyController.clear();
+                          selectImageList.clear();
+                          if (context.mounted) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                    const ProductListScreen()));
+                          }
+                        }
+                        else {
+                          autoValidateMode = true;
+                          if(selectImageList.length<=2){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
+                                content: Text(
+                                    "Select Minimum 2 Image Required ::")));
+                          }
+                        }
+                      }),
                   ],
                 ),
               ),
@@ -490,7 +550,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
         }
       }
   }
-  Future uploadImageStorage() async {
+  Future uploadImageStorage(String id) async {
     isEnable = false;
     isReadOnly = true;
     enableInteractiveSelection = false;

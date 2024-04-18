@@ -62,7 +62,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   bool isEnable = true;
   bool enableInteractiveSelection = true;
 
-  initialEditData() {
+  editData() {
     productNameController.text = widget.productName!;
     companyNameController.setDropDown(DropDownValueModel(
         name: widget.companyName!, value: widget.companyName));
@@ -73,20 +73,12 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     qtyController.text = widget.qty!;
     //selectImageList=widget.imageList!;
     log("widget.imageList! :: ${widget.imageList!.toList()}");
-    for (var item in widget.imageList!) {
-      if (item is File) {
-        selectImageList.insert(selectImageList.length-1,item);
-      } else if (item is String) {
-        selectImageList.insert(selectImageList.length-1,File(item));
-      } else {
-        throw ArgumentError('Unsupported item type in the list');
-      }
-    }
+    selectImageList.add(widget.imageList! as File);
   }
 
   @override
   initState() {
-    widget.isEdit ? initialEditData() : null;
+    widget.isEdit ? editData() : null;
     super.initState();
   }
 
@@ -357,104 +349,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             .height * 0.08,
                         context,
                         text: widget.isEdit ? Strings.edit : Strings.save,
-                        /*onTap: widget.isEdit
-                            ? () async {
-                          if (formKey.currentState!.validate() && selectImageList.length > 2) {
-                            var product = {
-                              "product_name": productNameController.text,
-                              "category":
-                              categoryController.dropDownValue!.value,
-                              "company_name": companyNameController
-                                  .dropDownValue!.value,
-                              "description": descriptionController.text,
-                              "price": priceController.text,
-                              "qty": qtyController.text,
-                              "id": widget.id,
-                              "image_url": selectImageUrlList
-                            };
-                            await uploadImageStorage().then((value) =>
-                                Database.updateProduct(
-                                    product, widget.id!)
-                                    .then((value) =>
-                                    ScaffoldMessenger.of(
-                                        context)
-                                        .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "Edit Product Success")))));
-                            productNameController.clear();
-                            descriptionController.clear();
-                            categoryController.clearDropDown();
-                            companyNameController.clearDropDown();
-                            priceController.clear();
-                            qtyController.clear();
-                            selectImageList.clear();
-                            if (context.mounted) {
-                              Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                      const ProductListScreen()));
-                            }
-                          } else {
-                            autoValidateMode = true;
-                            if(selectImageList.length<=2){
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                  content: Text(
-                                      "Select Minimum 2 Image Required ::")));
-                            }
-                          }
-                        }
-                            : () async {
-                          if (formKey.currentState!.validate() && selectImageList.length > 2){
-                              var product = {
-                                "product_name":
-                                productNameController.text,
-                                "category": categoryController
-                                    .dropDownValue!.value,
-                                "company_name": companyNameController
-                                    .dropDownValue!.value,
-                                "description":
-                                descriptionController.text,
-                                "price": priceController.text,
-                                "qty": qtyController.text,
-                                "id": id,
-                                "image_url": selectImageUrlList,
-                              };
-                              await uploadImageStorage().then((value) {
-                              return Database.addProduct(product, id)
-                                  .then((value) =>
-                                    ScaffoldMessenger
-                                        .of(context)
-                                        .showSnackBar(const SnackBar(
-                                        content: Text(
-                                            "Add Product Success"))));
-                              });
-                              productNameController.clear();
-                              descriptionController.clear();
-                              categoryController.clearDropDown();
-                              companyNameController.clearDropDown();
-                              priceController.clear();
-                              qtyController.clear();
-                              selectImageList.clear();
-                              if (context.mounted) {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                        const ProductListScreen()));
-                              }
-                            }
-                          else {
-                            autoValidateMode = true;
-                            if(selectImageList.length<=2){
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                  content: Text(
-                                      "Select Minimum 2 Image Required ::")));
-                            }
-                          }
-                        }),*/
                       onTap: () async {
                         if (formKey.currentState!.validate() && selectImageList.length > 2){
                           var product = {

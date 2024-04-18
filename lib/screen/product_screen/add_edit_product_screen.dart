@@ -73,7 +73,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     qtyController.text = widget.qty!;
     //selectImageList=widget.imageList!;
     log("widget.imageList! :: ${widget.imageList!.toList()}");
-    selectImageList.add(widget.imageList! as File);
+    selectImageList.insert(selectImageList.length-1,widget.imageList! as File);
   }
 
   @override

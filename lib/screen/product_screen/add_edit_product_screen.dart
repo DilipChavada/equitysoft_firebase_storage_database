@@ -61,7 +61,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   bool isReadOnly = false;
   bool isEnable = true;
   bool enableInteractiveSelection = true;
-
+  List<dynamic> imageList=[];
   editData() {
     productNameController.text = widget.productName!;
     companyNameController.setDropDown(DropDownValueModel(
@@ -71,9 +71,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    //selectImageList=widget.imageList!;
+   selectImageList=widget.imageList!;
+    log("selectedImageList :: ${selectImageList.toList()}");
     log("widget.imageList! :: ${widget.imageList!.toList()}");
-    selectImageList.insert(selectImageList.length-1,widget.imageList! as File);
   }
 
   @override

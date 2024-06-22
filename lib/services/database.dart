@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +55,7 @@ class Database {
     required String productName,
     required String category,
     required String companyName,
-    required List imageList,
+        List<dynamic> imageList=[File("PlusIcon")],
   }){
     return Navigator.pushReplacement(
         context,

@@ -27,7 +27,7 @@ class AddEditProductScreen extends StatefulWidget {
     this.price,
     this.qty,
     this.id,
-    this.imageList,
+    this.imageList=[File("PlusIcon")],
   });
   final bool isEdit;
   final String? productName;
@@ -37,7 +37,7 @@ class AddEditProductScreen extends StatefulWidget {
   final String? price;
   final String? qty;
   final String? id;
-  final List? imageList;
+  final List<dynamic>? imageList;
 
   @override
   State<AddEditProductScreen> createState() => _AddEditProductScreenState();
@@ -61,8 +61,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   bool isReadOnly = false;
   bool isEnable = true;
   bool enableInteractiveSelection = true;
-  List imageList=[];
-  editData() {
+  editData() async {
     productNameController.text = widget.productName!;
     companyNameController.setDropDown(DropDownValueModel(
         name: widget.companyName!, value: widget.companyName));
@@ -72,6 +71,16 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
     //selectImageList=List<String>.from(widget.imageList!).cast<File>();
+    //selectImageList.add(widget.imageList as File);
+    for (var item in widget.imageList!) {
+      if (item is File) {
+        log('Processing file: ${item.path}');
+        selectImageList.add(item);
+      } else {
+        log('Item is not a File: $item');
+
+      }
+    }
     log("selectedImageList :: ${selectImageList.toList()}");
     log("widget.imageList! :: ${widget.imageList!.toList()}");
   }

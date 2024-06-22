@@ -61,7 +61,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
   bool isReadOnly = false;
   bool isEnable = true;
   bool enableInteractiveSelection = true;
-  List<dynamic> imageList=[];
+  List imageList=[];
   editData() {
     productNameController.text = widget.productName!;
     companyNameController.setDropDown(DropDownValueModel(
@@ -71,10 +71,9 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-   // selectImageList=List<File>.from(widget.imageList!).cast<File>();
+    //selectImageList=List<String>.from(widget.imageList!).cast<File>();
     log("selectedImageList :: ${selectImageList.toList()}");
     log("widget.imageList! :: ${widget.imageList!.toList()}");
-
   }
 
   @override
@@ -366,15 +365,17 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
                             "id": widget.isEdit ? widget.id : id,
                             "image_url": selectImageUrlList,
                           };
-                          widget.isEdit ? await uploadImageStorage(widget.id!).then((value) =>
-                              Database.updateProduct(
+                          widget.isEdit ?
+                             await uploadImageStorage(widget.id!).then((value) {
+                              return Database.updateProduct(
                                   product, widget.id!)
                                   .then((value) =>
                                   ScaffoldMessenger.of(
                                       context)
                                       .showSnackBar(const SnackBar(
                                       content: Text(
-                                          "Edit Product Success"))))) :
+                                          "Edit Product Success"))));
+                          }) :
                           await uploadImageStorage(id).then((value) {
                             return Database.addProduct(product, id)
                                 .then((value) =>
@@ -456,6 +457,13 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
       }
   }
   Future uploadImageStorage(String id) async {
+    var folderRef = FirebaseStorage.instance.ref().child("images").child(id);
+
+    final ListResult result = await folderRef.listAll();
+
+    await Future.forEach(result.items, (Reference ref) async => await ref.delete());
+
+
     isEnable = false;
     isReadOnly = true;
     enableInteractiveSelection = false;

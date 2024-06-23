@@ -70,17 +70,7 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    //selectImageList=List<String>.from(widget.imageList!).cast<File>();
-    //selectImageList.add(widget.imageList as File);
-    for (var item in widget.imageList!) {
-      if (item is File) {
-        log('Processing file: ${item.path}');
-        selectImageList.add(item);
-      } else {
-        log('Item is not a File: $item');
-
-      }
-    }
+    //selectImageList.insert(widget.imageList);
     log("selectedImageList :: ${selectImageList.toList()}");
     log("widget.imageList! :: ${widget.imageList!.toList()}");
   }

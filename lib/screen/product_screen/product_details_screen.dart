@@ -79,7 +79,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5)),
                           clipBehavior: Clip.hardEdge,
-                          child:Image.file(widget.imageList[index],fit: BoxFit.cover),
+                          child:Image.network(widget.imageList[index],fit: BoxFit.cover),
                         );
                       },
                       gridDelegate:

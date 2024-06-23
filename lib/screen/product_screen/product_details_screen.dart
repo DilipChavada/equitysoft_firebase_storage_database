@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_container.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/add_edit_product_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_list_screen.dart';
@@ -20,7 +19,7 @@ class ProductDetailsScreen extends StatefulWidget {
     required this.qty,
     required this.description,
     required this.id,
-    this.imageList=[File("PlusIcon")],
+    required this.imageList,
   });
 
   final String productName;
@@ -30,7 +29,7 @@ class ProductDetailsScreen extends StatefulWidget {
   final String qty;
   final String description;
   final String id;
-  final List<dynamic> imageList;
+  final List imageList;
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();

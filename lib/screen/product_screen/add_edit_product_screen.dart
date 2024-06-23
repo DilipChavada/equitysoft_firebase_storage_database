@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dropdown_textfield/dropdown_textfield.dart';
-import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_customDropDownTextField.dart';
+import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_dropdown_textfield.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_textfield.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_list_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/services/database.dart';
@@ -27,7 +27,7 @@ class AddEditProductScreen extends StatefulWidget {
     this.price,
     this.qty,
     this.id,
-    this.imageList=[File("PlusIcon")],
+    this.imageList,
   });
   final bool isEdit;
   final String? productName;
@@ -37,7 +37,7 @@ class AddEditProductScreen extends StatefulWidget {
   final String? price;
   final String? qty;
   final String? id;
-  final List<dynamic>? imageList;
+  final List? imageList;
 
   @override
   State<AddEditProductScreen> createState() => _AddEditProductScreenState();

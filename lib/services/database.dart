@@ -55,7 +55,7 @@ class Database {
     required String productName,
     required String category,
     required String companyName,
-        List<dynamic> imageList=[File("PlusIcon")],
+    required List imageList,
   }){
     return Navigator.pushReplacement(
         context,

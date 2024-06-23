@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_textstyles.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/home_screen.dart';

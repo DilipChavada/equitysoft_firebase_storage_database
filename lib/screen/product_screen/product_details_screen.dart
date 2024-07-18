@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/custom_container.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/add_edit_product_screen.dart';
 import 'package:equitysoft_add_update_delete_view_data_local_storage_database/screen/product_screen/product_list_screen.dart';
@@ -79,7 +80,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5)),
                           clipBehavior: Clip.hardEdge,
-                          child:Image.network(widget.imageList[index],fit: BoxFit.cover),
+                          child:Image.file(widget.imageList[index],fit: BoxFit.cover),
                         );
                       },
                       gridDelegate:

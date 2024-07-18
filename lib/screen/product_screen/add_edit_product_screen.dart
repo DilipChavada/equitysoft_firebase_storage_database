@@ -70,7 +70,6 @@ class _AddEditProductScreenState extends State<AddEditProductScreen> {
     descriptionController.text = widget.description!;
     priceController.text = widget.price!;
     qtyController.text = widget.qty!;
-    //selectImageList.insert(widget.imageList);
     log("selectedImageList :: ${selectImageList.toList()}");
     log("widget.imageList! :: ${widget.imageList!.toList()}");
   }
